@@ -15,7 +15,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "pkg": "pkg --target linux-x64,mac-x64,win-x64,mac-arm64 --output substreams-node dist/bin/cli.js",
+    "pkg": "pkg --target linux-x64,mac-x64,win-x64,mac-arm64 --output substreams-node dist/index.js",
     "prepublishOnly": "npm run test && npm run build"
   },
   "files": [
