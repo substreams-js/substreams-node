@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { fetchSubstream } from "./fetch.js";
 import { token } from "./token.js";
 import { createGrpcTransport } from "@bufbuild/connect-node";

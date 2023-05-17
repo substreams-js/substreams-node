@@ -8,7 +8,7 @@
   "type": "module",
   "exports": "./dist/index.js",
   "bin": {
-    "substreams-sink-prometheus": "dist/bin/cli.js"
+    "substreams-sink-prometheus": "dist/index.js"
   },
   "engines": {
     "node": ">=12"
