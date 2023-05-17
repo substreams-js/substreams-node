@@ -30,7 +30,8 @@
   ],
   "dependencies": {
     "@bufbuild/connect-node": "latest",
-    "@substreams/core": "0.0.x"
+    "@substreams/core": "^0.0.1",
+    "typed-emitter": "^2.1.0"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",
