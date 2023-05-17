@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "@substreams/node",
+  "version": "0.0.1",
+  "description": "Substreams Node.js",
+  "license": "MIT",
+  "repository": "substreams-js/substreams-node",
+  "type": "module",
+  "exports": "./dist/index.js",
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build": "del-cli dist && tsc",
+    "prepublishOnly": "npm run test && npm run build",
+    "test": "vitest --coverage"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "substreams",
+    "streamingfast",
+    "thegraph",
+    "graph"
+  ],
+  "dependencies": {
+    "@bufbuild/connect-node": "latest",
+    "@substreams/core": "0.0.x"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "latest",
+    "@types/node": "latest",
+    "@vitest/coverage-c8": "latest",
+    "del-cli": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}
