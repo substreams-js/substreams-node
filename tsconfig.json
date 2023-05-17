@@ -1,9 +1,11 @@
 {
-  "extends": "@sindresorhus/tsconfig",
+  "extends": "@tsconfig/recommended",
   "compilerOptions": {
+		"target": "ESNext",
 		"outDir": "dist",
 	},
 	"include": [
-		"src"
+		"src",
+		"bin"
 	]
 }

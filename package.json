@@ -7,13 +7,16 @@
   "repository": "substreams-js/substreams-node",
   "type": "module",
   "exports": "./dist/index.js",
+  "bin": {
+    "substreams-sink-prometheus": "dist/bin/cli.js"
+  },
   "engines": {
     "node": ">=12"
   },
   "scripts": {
-    "build": "del-cli dist && tsc",
-    "prepublishOnly": "npm run test && npm run build",
-    "test": "vitest --coverage"
+    "build": "tsc",
+    "pkg": "pkg --target linux-x64,mac-x64,win-x64,mac-arm64 --output substreams-node dist/bin/cli.js",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "files": [
     "dist"
@@ -30,11 +33,9 @@
     "@substreams/core": "0.0.x"
   },
   "devDependencies": {
-    "@sindresorhus/tsconfig": "latest",
+    "@tsconfig/recommended": "latest",
     "@types/node": "latest",
-    "@vitest/coverage-c8": "latest",
-    "del-cli": "latest",
-    "typescript": "latest",
-    "vitest": "latest"
+    "pkg": "latest",
+    "typescript": "latest"
   }
 }

@@ -7,6 +7,11 @@
 !.node-version
 !.env.tpl
 
+*-linux-x64
+*-macos-arm64
+*-macos-x64
+*-win-x64.exe
+
 # Ignore log output
 *.log
 
