@@ -1,6 +1,6 @@
 # `@substreams/node`
 
-> Substreams for Node.js
+> Substreams for `Node.js`
 
 ## Install
 

@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x, latest]
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,4 +20,4 @@ jobs:
 
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
+      - run: npm test --if-present

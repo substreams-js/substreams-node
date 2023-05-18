@@ -4,7 +4,7 @@ import { IEnumTypeRegistry, IMessageTypeRegistry, IServiceTypeRegistry } from "@
 export type Registry = IMessageTypeRegistry & IEnumTypeRegistry & IServiceTypeRegistry;
 
 // Utils (to move in Core)
-import { parseStopBlock, calculateHeadBlockTimeDrift, timeout, unpack, parseBlockData, decode} from './utils.js';
+import { calculateHeadBlockTimeDrift, timeout, unpack, parseBlockData, decode} from './utils.js';
 import { getTypeName } from './utils.js';
 export * from "./utils.js";
 
@@ -49,9 +49,7 @@ export class Substreams extends (EventEmitter as new () => TypedEventEmitter<Mes
     public modules: Modules;
     public registry: Registry;
     public spkg: Uint8Array;
-    // public transport: Transport;
     public authorization = "";
-    // public callOptions?: CallOptions;
 
     private stopped = false;
 
@@ -72,8 +70,6 @@ export class Substreams extends (EventEmitter as new () => TypedEventEmitter<Mes
         super();
         this.spkg = spkg;
         this.outputModule = outputModule;
-        // this.startBlockNum = options.startBlockNum ?? "0";
-        // this.stopBlockNum = parseStopBlock(this.startBlockNum, options.stopBlockNum);
         this.startBlockNum = options.startBlockNum;
         this.stopBlockNum = options.stopBlockNum;
         this.startCursor = options.startCursor;
@@ -85,7 +81,6 @@ export class Substreams extends (EventEmitter as new () => TypedEventEmitter<Mes
         this.host = options.host ?? DEFAULT_HOST;
         this.auth = options.auth ?? DEFAULT_AUTH;
         this.authorization = options.authorization ?? "";
-        // this.callOptions = options.callOptions;
 
         // unpack spkg
         const { modules, registry } = unpack(spkg);
@@ -129,7 +124,7 @@ export class Substreams extends (EventEmitter as new () => TypedEventEmitter<Mes
         }
         // create transport
         const transport = createGrpcTransport({
-            baseUrl: "https://api.streamingfast.io",
+            baseUrl: this.host,
             httpVersion: "2",
             interceptors: [createAuthInterceptor(this.authorization)],
             jsonOptions: {
@@ -142,7 +137,7 @@ export class Substreams extends (EventEmitter as new () => TypedEventEmitter<Mes
             outputModule: this.outputModule,
             productionMode: true,
             startBlockNum: this.startBlockNum,
-            stopBlockNum: this.stopBlockNum,
+            stopBlockNum: this.stopBlockNum ?? 0,
         });
 
         // Send Substream Data to Adapter
