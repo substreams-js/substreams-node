@@ -7,21 +7,15 @@
   "repository": "substreams-js/substreams-node",
   "type": "module",
   "exports": "./dist/index.js",
-  "bin": {
-    "substreams-sink-prometheus": "dist/index.js"
-  },
-  "engines": {
-    "node": ">=12"
-  },
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "pkg": "pkg --target linux-x64,mac-x64,win-x64,mac-arm64 --output substreams-node dist/index.js",
-    "prepublishOnly": "npm run test && npm run build"
+    "build:cjs": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "dist"
   ],
-  "types": "dist/index.d.ts",
   "keywords": [
     "substreams",
     "streamingfast",
@@ -30,13 +24,11 @@
   ],
   "dependencies": {
     "@bufbuild/connect-node": "latest",
-    "@substreams/core": "^0.1.1",
-    "typed-emitter": "latest"
+    "@bufbuild/protobuf": "latest",
+    "@substreams/core": "^0.1.2"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",
-    "@types/node": "latest",
-    "pkg": "latest",
     "typescript": "latest"
   }
 }

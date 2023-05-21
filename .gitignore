@@ -11,6 +11,8 @@
 *-macos-arm64
 *-macos-x64
 *-win-x64.exe
+*.blob
+*-macos
 
 # Ignore log output
 *.log

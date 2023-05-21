@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "example-node",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:bun": "bun build --compile ./example.ts --outfile build",
+    "build:node": "./build.sh"
+  },
+  "dependencies": {
+    "@bufbuild/connect-node": "latest",
+    "@bufbuild/protobuf": "latest",
+    "@substreams/core": "^0.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@rollup/plugin-node-resolve": "latest",
+    "@tsconfig/recommended": "latest",
+    "rollup": "latest",
+    "typescript": "latest"
+  }
+}

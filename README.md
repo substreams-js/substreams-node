@@ -13,41 +13,40 @@ npm install @substreams/node
 ## Usage
 
 ```js
-import { Substreams, download } from "@substreams/node";
+import { createRegistry, fetchSubstream, createRequest, streamBlocks, unpackMapOutput, isEmptyMessage } from "@substreams/core";
+import { createDefaultTransport } from "../../index.js";
+
+// auth API token
+// https://app.streamingfast.io/
+if ( !process.env.SUBSTREAMS_API_TOKEN ) throw new Error(`SUBSTREAMS_API_TOKEN is require`);
+const token = process.env.SUBSTREAMS_API_TOKEN
+const baseUrl = 'https://mainnet.eth.streamingfast.io:443';
 
 // User parameters
-const url = "https://github.com/streamingfast/substreams-ethereum-quickstart/releases/download/1.0.0/substreams-ethereum-quickstart-v1.0.0.spkg";
-const outputModule = "map_block";
-const startBlockNum = "12292922";
-const stopBlockNum = "+10";
+const url = "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.1/subtivity-ethereum-v0.2.1.spkg";
+const outputModule = "prom_out";
+const startBlockNum = 12292922n;
+const stopBlockNum = "+3";
 
-(async () => {
-    // download Substream from IPFS
-    const spkg = await download(url);
+// Download Substream
+const substreamPackage = await fetchSubstream(url);
 
-    // Initialize Substreams
-    const substreams = new Substreams(spkg, outputModule, {
-        startBlockNum,
-        stopBlockNum,
-        authorization: process.env.SUBSTREAMS_API_TOKEN
-    });
+// Connect Transport
+const registry = createRegistry(substreamPackage);
+const transport = createDefaultTransport(baseUrl, token, registry);
+const request = createRequest({
+  substreamPackage,
+  outputModule,
+  productionMode: true,
+  startBlockNum,
+  stopBlockNum,
+});
 
-    // first block received
-    substreams.on("start", (cursor, clock) => {
-        console.log({status: "start", cursor, clock});
-    });
-
-    // stream of decoded MapOutputs
-    substreams.on("anyMessage", (message) => {
-        console.log({message});
-    });
-
-    // end of stream
-    substreams.on("end", (cursor, clock) => {
-        console.log({status: "end", cursor, clock});
-    });
-
-    // start streaming Substream
-    substreams.start();
-})();
+// Stream Blocks
+for await (const response of streamBlocks(transport, request)) {
+  const output = unpackMapOutput(response.response, registry);
+  if (output && !isEmptyMessage(output)) {
+    console.dir(output.toJson({ typeRegistry: registry }));
+  }
+}
 ```
