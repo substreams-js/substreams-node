@@ -14,7 +14,7 @@ npm install @substreams/node
 
 ```js
 import { createRegistry, fetchSubstream, createRequest, streamBlocks, unpackMapOutput, isEmptyMessage } from "@substreams/core";
-import { createDefaultTransport } from "../../index.js";
+import { createDefaultTransport } from "@substreams/node";
 
 // auth API token
 // https://app.streamingfast.io/
