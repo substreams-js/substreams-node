@@ -1,10 +1,10 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default {
-  input: 'index.ts',
+  input: "index.ts",
   output: {
-    dir: 'dist',
-    format: 'cjs'
+    file: "out/bundle.js",
+    format: "cjs",
   },
-  plugins: [nodeResolve()]
+  plugins: [nodeResolve({ extensions: [".ts"] })],
 };
