@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "@substreams/node",
   "version": "0.0.1",
   "description": "Substreams for Node.js",
@@ -22,12 +21,11 @@
     "@bufbuild/connect": "^0.9.0",
     "@bufbuild/connect-node": "latest",
     "@bufbuild/protobuf": "latest",
-    "@substreams/core": "^0.1.2",
-    "rxjs": "^7.8.1"
+    "@substreams/core": "^0.1.3"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",
-    "@types/node": "^20.2.3",
+    "@types/node": "latest",
     "rome": "latest",
     "typescript": "latest"
   }
