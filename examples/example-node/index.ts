@@ -1,12 +1,5 @@
-import { createDefaultTransport } from "../../dist/index.js";
-import {
-  createRegistry,
-  createRequest,
-  fetchSubstream,
-  isEmptyMessage,
-  streamBlocks,
-  unpackMapOutput,
-} from "@substreams/core";
+import { createDefaultTransport, readFileSyncSubstream } from "../../index.js";
+import { createRegistry, createRequest, isEmptyMessage, streamBlocks, unpackMapOutput } from "@substreams/core";
 
 // auth API token
 // https://app.streamingfast.io/
@@ -17,15 +10,14 @@ const token = process.env.SUBSTREAMS_API_TOKEN;
 const baseUrl = "https://mainnet.eth.streamingfast.io:443";
 
 // User parameters
-const url =
-  "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.1/subtivity-ethereum-v0.2.1.spkg";
+const filepath = "./subtivity-ethereum.spkg";
 const outputModule = "prom_out";
 const startBlockNum = 12292922n;
 const stopBlockNum = "+3";
 
 // Download Substream
 (async () => {
-  const substreamPackage = await fetchSubstream(url);
+  const substreamPackage = readFileSyncSubstream(filepath);
 
   // Connect Transport
   const registry = createRegistry(substreamPackage);

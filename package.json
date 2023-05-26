@@ -16,15 +16,8 @@
     "build:cjs": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "substreams",
-    "streamingfast",
-    "thegraph",
-    "graph"
-  ],
+  "files": ["dist"],
+  "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
   "dependencies": {
     "@bufbuild/connect": "^0.9.0",
     "@bufbuild/connect-node": "latest",
@@ -34,6 +27,7 @@
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",
+    "@types/node": "^20.2.3",
     "rome": "latest",
     "typescript": "latest"
   }
