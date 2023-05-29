@@ -31,10 +31,11 @@ const stopBlockNum = "+3";
   });
 
   // Stream Blocks
-  for await (const response of streamBlocks(transport, request)) {
-    const output = unpackMapOutput(response.response, registry);
+  for await (const { response, state } of streamBlocks(transport, request)) {
+    const output = unpackMapOutput(response, registry);
     if (output && !isEmptyMessage(output)) {
       console.dir(output.toJson({ typeRegistry: registry }));
     }
+    console.dir(state);
   }
 })();

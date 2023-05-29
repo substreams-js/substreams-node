@@ -13,15 +13,8 @@ npm install @substreams/node
 ## Usage
 
 ```js
-import { createDefaultTransport } from "@substreams/node";
-import {
-  createRegistry,
-  createRequest,
-  fetchSubstream,
-  isEmptyMessage,
-  streamBlocks,
-  unpackMapOutput,
-} from "@substreams/core";
+import { BlockEmitter, createDefaultTransport, readFileSyncSubstream } from "../../index.js";
+import { createRegistry, createRequest } from "@substreams/core";
 
 // auth API token
 // https://app.streamingfast.io/
@@ -32,15 +25,14 @@ const token = process.env.SUBSTREAMS_API_TOKEN;
 const baseUrl = "https://mainnet.eth.streamingfast.io:443";
 
 // User parameters
-const url =
-  "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.1/subtivity-ethereum-v0.2.1.spkg";
+const filepath = "./examples/subtivity-ethereum.spkg";
 const outputModule = "prom_out";
 const startBlockNum = 12292922n;
 const stopBlockNum = "+3";
 
 // Download Substream
 (async () => {
-  const substreamPackage = await fetchSubstream(url);
+  const substreamPackage = readFileSyncSubstream(filepath);
 
   // Connect Transport
   const registry = createRegistry(substreamPackage);
@@ -53,12 +45,14 @@ const stopBlockNum = "+3";
     stopBlockNum,
   });
 
+  // NodeJS Events
+  const emitter = new BlockEmitter(transport, request, registry);
+
   // Stream Blocks
-  for await (const response of streamBlocks(transport, request)) {
-    const output = unpackMapOutput(response.response, registry);
-    if (output && !isEmptyMessage(output)) {
-      console.dir(output.toJson({ typeRegistry: registry }));
-    }
-  }
+  emitter.on("anyMessage", (message, state) => {
+    console.dir(message);
+    console.dir(state);
+  });
+  emitter.start();
 })();
 ```
