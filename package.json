@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Substreams for Node.js",
   "license": "MIT",
   "repository": "substreams-js/substreams-node",
@@ -12,10 +12,9 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:cjs": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "files": ["dist"],
+  "files": ["dist", "src"],
   "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
   "dependencies": {
     "@bufbuild/connect": "^0.9.0",

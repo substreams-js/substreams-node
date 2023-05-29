@@ -1,38 +1,3 @@
-```mermaid
-graph TD;
-  creator.a --> user1.a;
-  creator.a --> user2.a;
-  creator.a --> user3.a;
-  user1.a --> msig.a;
-  user2.a --> msig.a;
-  user3.a --> msig.a;
-  creator.b --> user1.b;
-  creator.b --> user2.b;
-  creator.b --> user3.b;
-  user1.b --> msig.b;
-  user2.b --> msig.b;
-  user3.b --> msig.b;
-  creator.c --> user1.c;
-  creator.c --> user2.c;
-  creator.c --> user3.c;
-  user1.c --> msig.c;
-  user2.c --> msig.c;
-  user3.c --> msig.c;
-  creator.d --> user1.d;
-  creator.d --> user2.d;
-  creator.d --> user3.d;
-  user1.d --> msig.d;
-  user2.d --> msig.d;
-  user3.d --> msig.d;
-  creator.e --> user1.e;
-  creator.e --> user2.e;
-  creator.e --> user3.e;
-  user1.e --> msig.e;
-  user2.e --> msig.e;
-  user3.e --> msig.e;
-```
-
-
 # `@substreams/node`
 
 > Substreams for `Node.js`

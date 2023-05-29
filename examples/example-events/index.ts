@@ -1,5 +1,5 @@
-import { createDefaultTransport, readFileSyncSubstream } from "../../index.js";
-import { createRegistry, createRequest, isEmptyMessage, streamBlocks, unpackMapOutput } from "@substreams/core";
+import { BlockEmitter, createDefaultTransport, readFileSyncSubstream } from "../../index.js";
+import { createRegistry, createRequest, isEmptyMessage, unpackMapOutput } from "@substreams/core";
 
 // auth API token
 // https://app.streamingfast.io/
@@ -30,11 +30,18 @@ const stopBlockNum = "+3";
     stopBlockNum,
   });
 
+  // NodeJS Events
+  const emitter = new BlockEmitter(transport, request);
+
   // Stream Blocks
-  for await (const response of streamBlocks(transport, request)) {
-    const output = unpackMapOutput(response.response, registry);
+  emitter.on("block", ({ state, response }) => {
+    if (state.cursor) {
+      console.dir({ block_num: state.current, cursor: state.cursor.toString() });
+    }
+    const output = unpackMapOutput(response, registry);
     if (output && !isEmptyMessage(output)) {
       console.dir(output.toJson({ typeRegistry: registry }));
     }
-  }
+  });
+  emitter.start();
 })();

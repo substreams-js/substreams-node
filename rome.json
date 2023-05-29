@@ -8,6 +8,9 @@
   },
   "linter": {
     "rules": {
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
       "all": true
     }
   },
