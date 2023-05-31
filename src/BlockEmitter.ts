@@ -1,13 +1,15 @@
-import { parseBlockData, parseBlockUndoSignal, parseModulesProgress } from "./utils.js";
 import { type CallOptions, type Transport, createPromiseClient } from "@bufbuild/connect";
-import { IMessageTypeRegistry, JsonObject } from "@bufbuild/protobuf";
+import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
 import {
   BlockScopedData,
   BlockUndoSignal,
   Clock,
+  InitialSnapshotComplete,
+  InitialSnapshotData,
   ModulesProgress,
   type Request,
   Response,
+  SessionInit,
   State,
   Stream,
   createStateTracker,
@@ -42,13 +44,22 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
  * A map of event names to argument tuples
  */
 type LocalEventTypes = {
+  // block
+  session: [session: SessionInit, state: State];
+  progress: [progress: ModulesProgress, state: State];
   block: [block: BlockScopedData, state: State];
+  undo: [undo: BlockUndoSignal, state: State];
+
+  // debug (only available in development mode)
+  debugSnapshotData: [undo: InitialSnapshotData, state: State];
+  debugSnapshotComplete: [undo: InitialSnapshotComplete, state: State];
+
+  // response
   response: [response: Response, state: State];
   cursor: [cursor: string, state: State];
   clock: [clock: Clock, state: State];
+  output: [message: Message<AnyMessage>, state: State];
   anyMessage: [message: JsonObject, state: State];
-  progress: [progress: ModulesProgress, state: State];
-  blockUndoSignal: [undo: BlockUndoSignal, state: State];
 };
 
 export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
@@ -72,29 +83,41 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
       const state = track(response);
       this.emit("response", response, state);
 
-      const block = parseBlockData(response);
-      if (block) {
-        this.emit("block", block, state);
-        this.emit("cursor", block.cursor, state);
-        if (block.clock) {
-          this.emit("clock", block.clock, state);
+      switch (response.message.case) {
+        case "blockScopedData": {
+          const block = response.message.value;
+          this.emit("block", block, state);
+          this.emit("cursor", block.cursor, state);
+          if (block.clock) {
+            this.emit("clock", block.clock, state);
+            block.clock.id;
+          }
+          const output = unpackMapOutput(response, this.registry);
+          if (output) {
+            this.emit("output", output, state);
+            if (!isEmptyMessage(output)) {
+              const message = output.toJson({ typeRegistry: this.registry });
+              this.emit("anyMessage", message as JsonObject, state);
+            }
+          }
+          break;
         }
-      }
-
-      const progress = parseModulesProgress(response);
-      if (progress) {
-        this.emit("progress", progress, state);
-      }
-
-      const blockUndoSignal = parseBlockUndoSignal(response);
-      if (blockUndoSignal) {
-        this.emit("blockUndoSignal", blockUndoSignal, state);
-      }
-
-      const output = unpackMapOutput(response, this.registry);
-      if (output && !isEmptyMessage(output)) {
-        const message = output.toJson({ typeRegistry: this.registry });
-        this.emit("anyMessage", message as JsonObject, state);
+        case "progress": {
+          this.emit("progress", response.message.value, state);
+          break;
+        }
+        case "blockUndoSignal": {
+          this.emit("undo", response.message.value, state);
+          break;
+        }
+        case "debugSnapshotData": {
+          this.emit("debugSnapshotData", response.message.value, state);
+          break;
+        }
+        case "debugSnapshotComplete": {
+          this.emit("debugSnapshotComplete", response.message.value, state);
+          break;
+        }
       }
     }
   }
