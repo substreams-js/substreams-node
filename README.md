@@ -17,8 +17,8 @@ npm install @substreams/node
 
 ## [Examples](/examples)
 
-- [EventEmitters](/examples/event-events)
-- [Node](/examples/event-node)
+- [EventEmitters](/examples/example-events)
+- [Node](/examples/example-node)
 
 ```typescript
 import { createRegistry, createRequest } from "@substreams/core";
