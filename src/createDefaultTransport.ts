@@ -1,8 +1,9 @@
+import { Transport } from "@bufbuild/connect";
 import { createGrpcTransport } from "@bufbuild/connect-node";
 import type { IMessageTypeRegistry } from "@bufbuild/protobuf";
 import { createAuthInterceptor } from "@substreams/core";
 
-export function createDefaultTransport(baseUrl: string, token: string, registry: IMessageTypeRegistry) {
+export function createDefaultTransport(baseUrl: string, token: string, registry: IMessageTypeRegistry): Transport {
   return createGrpcTransport({
     baseUrl,
     httpVersion: "2",

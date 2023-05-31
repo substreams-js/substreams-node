@@ -22,7 +22,7 @@
     "@bufbuild/connect": "latest",
     "@bufbuild/connect-node": "latest",
     "@bufbuild/protobuf": "latest",
-    "@substreams/core": "0.1.3"
+    "@substreams/core": "^0.1.9"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",

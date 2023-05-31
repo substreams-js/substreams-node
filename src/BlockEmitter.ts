@@ -1,5 +1,6 @@
 import { type CallOptions, type Transport, createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
+import { State, createStateTracker, isEmptyMessage, unpackMapOutput } from "@substreams/core";
 import {
   BlockScopedData,
   BlockUndoSignal,
@@ -10,12 +11,9 @@ import {
   type Request,
   Response,
   SessionInit,
-  State,
   Stream,
-  createStateTracker,
-  isEmptyMessage,
-  unpackMapOutput,
-} from "@substreams/core";
+} from "@substreams/core/proto";
+
 import { EventEmitter } from "node:events";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
