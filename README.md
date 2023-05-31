@@ -1,5 +1,10 @@
 # `@substreams/node`
 
+[![Build Status](https://github.com/substreams-js/substreams-node/actions/workflows/ci.yml/badge.svg)](https://github.com/substreams-js/substreams-node/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/@substreams%2Fnode.svg)](https://www.npmjs.com/package/@substreams/node)
+[![License](https://img.shields.io/github/license/substreams-js/substreams-node)](LICENSE)
+[![Try substreams on RunKit](https://badge.runkitcdn.com/@substreams/node.svg)](https://npm.runkit.com/@substreams/node)
+
 > Substreams for `Node.js`
 
 ## Install
