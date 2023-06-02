@@ -43,9 +43,9 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
  */
 type LocalEventTypes = {
   // block
+  block: [block: BlockScopedData];
   session: [session: SessionInit, state: State];
   progress: [progress: ModulesProgress, state: State];
-  block: [block: BlockScopedData, state: State];
   undo: [undo: BlockUndoSignal, state: State];
 
   // debug (only available in development mode)
@@ -54,10 +54,9 @@ type LocalEventTypes = {
 
   // response
   response: [response: Response, state: State];
-  cursor: [cursor: string, state: State];
-  clock: [clock: Clock, state: State];
-  output: [message: Message<AnyMessage>, state: State];
-  anyMessage: [message: JsonObject, state: State];
+  cursor: [cursor: string, clock: Clock];
+  output: [message: Message<AnyMessage>, cursor: string, clock: Clock];
+  anyMessage: [message: JsonObject, cursor: string, clock: Clock];
 };
 
 export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
@@ -84,18 +83,16 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
       switch (response.message.case) {
         case "blockScopedData": {
           const block = response.message.value;
-          this.emit("block", block, state);
-          this.emit("cursor", block.cursor, state);
+          this.emit("block", block);
           if (block.clock) {
-            this.emit("clock", block.clock, state);
-            block.clock.id;
-          }
-          const output = unpackMapOutput(response, this.registry);
-          if (output) {
-            this.emit("output", output, state);
-            if (!isEmptyMessage(output)) {
-              const message = output.toJson({ typeRegistry: this.registry });
-              this.emit("anyMessage", message as JsonObject, state);
+            this.emit("cursor", block.cursor, block.clock);
+            const output = unpackMapOutput(response, this.registry);
+            if (output) {
+              this.emit("output", output, block.cursor, block.clock);
+              if (!isEmptyMessage(output)) {
+                const message = output.toJson({ typeRegistry: this.registry });
+                this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
+              }
             }
           }
           break;

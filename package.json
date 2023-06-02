@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Substreams for Node.js",
   "license": "MIT",
   "repository": "substreams-js/substreams-node",
@@ -22,7 +22,7 @@
     "@bufbuild/connect": "latest",
     "@bufbuild/connect-node": "latest",
     "@bufbuild/protobuf": "latest",
-    "@substreams/core": "^0.1.9"
+    "@substreams/core": "^0.1.10"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",

@@ -6,6 +6,7 @@
 		"module": "ESNext",
 		"moduleResolution": "nodenext",
 		"declaration": true,
+		"declarationMap": true,
 		"sourceMap": true
 	},
 	"include": [

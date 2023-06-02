@@ -35,9 +35,10 @@ const request = createRequest({
 const emitter = new BlockEmitter(transport, request, registry);
 
 // Stream Blocks
-emitter.on("anyMessage", (message, state) => {
+emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(message);
-  console.dir(state);
+  console.dir(cursor);
+  console.dir(clock);
 });
 
 emitter.start();
