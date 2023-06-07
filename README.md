@@ -60,5 +60,5 @@ emitter.on("anyMessage", (message, state) => {
   console.dir(state);
 });
 
-emitter.start();
+emitter.start(500); // 500ms delay start
 ```
