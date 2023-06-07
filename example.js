@@ -41,4 +41,4 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
-emitter.start();
+emitter.start(500); // 500ms delay start

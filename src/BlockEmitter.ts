@@ -13,10 +13,8 @@ import {
   SessionInit,
   Stream,
 } from "@substreams/core/proto";
-
 import { EventEmitter } from "node:events";
-
-import { timeout } from "./utils.js";
+import { setTimeout } from "node:timers/promises";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
@@ -75,11 +73,10 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     this.options = options;
   }
 
-  public async start(delaySeconds?: number | string) {
-    if (delaySeconds) {
-      await timeout(Number(delaySeconds) * 1000);
+  public async start(delay?: number) {
+    if (delay) {
+      await setTimeout(delay);
     }
-
     const track = createStateTracker(this.request);
     const client = createPromiseClient(Stream, this.transport);
 
