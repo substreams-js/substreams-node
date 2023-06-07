@@ -16,6 +16,8 @@ import {
 
 import { EventEmitter } from "node:events";
 
+import { timeout } from "./utils.js";
+
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
 
@@ -72,7 +74,12 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     this.registry = registry;
     this.options = options;
   }
-  public async start() {
+
+  public async start(delaySeconds?: number | string) {
+    if (delaySeconds) {
+      await timeout(Number(delaySeconds) * 1000);
+    }
+
     const track = createStateTracker(this.request);
     const client = createPromiseClient(Stream, this.transport);
 
