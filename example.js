@@ -1,4 +1,5 @@
-import { createModuleHash, createRegistry, createRequest, fetchSubstream } from "@substreams/core";
+import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
+import { readPackage } from "@substreams/manifest";
 import { BlockEmitter, createDefaultTransport } from "@substreams/node";
 
 // auth API token
@@ -18,9 +19,9 @@ const startBlockNum = 17381140;
 const stopBlockNum = "+3";
 
 // Read Substream
-const substreamPackage = await fetchSubstream(manifest);
-const hash = await createModuleHash(substreamPackage.modules, outputModule);
-console.log("output module hash:", Buffer.from(hash).toString("hex"));
+const substreamPackage = await readPackage(manifest);
+const moduleHash = await createModuleHashHex(substreamPackage.modules, outputModule);
+console.log({ moduleHash });
 
 // Connect Transport
 const registry = createRegistry(substreamPackage);

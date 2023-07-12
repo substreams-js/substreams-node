@@ -18,7 +18,8 @@ npm install @substreams/node
 ## Example
 
 ```typescript
-import { createRegistry, createRequest, fetchSubstream } from "@substreams/core";
+import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
+import { readPackage } from "@substreams/manifest";
 import { BlockEmitter, createDefaultTransport } from "@substreams/node";
 
 // auth API token
@@ -38,7 +39,9 @@ const startBlockNum = 17381140;
 const stopBlockNum = "+3";
 
 // Read Substream
-const substreamPackage = await fetchSubstream(manifest);
+const substreamPackage = await readPackage(manifest);
+const moduleHash = await createModuleHashHex(substreamPackage.modules, outputModule);
+console.log({ moduleHash });
 
 // Connect Transport
 const registry = createRegistry(substreamPackage);
@@ -55,9 +58,10 @@ const request = createRequest({
 const emitter = new BlockEmitter(transport, request, registry);
 
 // Stream Blocks
-emitter.on("anyMessage", (message, state) => {
+emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(message);
-  console.dir(state);
+  console.dir(cursor);
+  console.dir(clock);
 });
 
 emitter.start(500); // 500ms delay start
