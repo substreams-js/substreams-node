@@ -16,23 +16,13 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "files": [
-    "dist",
-    "src",
-    "example.js"
-  ],
-  "keywords": [
-    "substreams",
-    "streamingfast",
-    "thegraph",
-    "graph"
-  ],
+  "files": ["dist", "src", "example.js"],
+  "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
   "dependencies": {
     "@bufbuild/connect": "latest",
     "@bufbuild/connect-node": "latest",
     "@bufbuild/protobuf": "latest",
-    "@substreams/core": "^0.1.16",
-    "@substreams/manifest": "^0.0.5"
+    "@substreams/core": "^0.1.16"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",
