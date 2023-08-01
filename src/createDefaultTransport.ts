@@ -8,12 +8,12 @@ export function createDefaultTransport(
   baseUrl: string,
   token: string,
   registry: IMessageTypeRegistry,
-  headers?: any,
+  headers?: Headers,
 ): Transport {
   return createGrpcTransport({
     baseUrl,
     httpVersion: "2",
-    interceptors: [createAuthInterceptor(token), createHeadersInterceptor(headers)],
+    interceptors: [createHeadersInterceptor(headers), createAuthInterceptor(token)],
     jsonOptions: {
       typeRegistry: registry,
     },

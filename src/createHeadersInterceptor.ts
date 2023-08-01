@@ -1,9 +1,10 @@
 import type { Interceptor } from "@bufbuild/connect";
 
-export function createHeadersInterceptor(headers: any): Interceptor {
+export function createHeadersInterceptor(headers?: Headers): Interceptor {
   return (next) => async (req) => {
-    for (const header in headers) {
-      req.header.set(header, headers[header]);
+    for (const header in headers?.entries()) {
+      const [key, value] = header;
+      req.header.set(key, value);
     }
     return next(req);
   };
