@@ -89,7 +89,6 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
           const block = response.message.value;
           this.emit("block", block);
           if (block.clock) {
-            this.emit("cursor", block.cursor, block.clock);
             const output = unpackMapOutput(response, this.registry);
             if (output) {
               this.emit("output", output, block.cursor, block.clock);
@@ -98,6 +97,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
                 this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
               }
             }
+            this.emit("cursor", block.cursor, block.clock);
           }
           break;
         }
