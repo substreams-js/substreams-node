@@ -1,6 +1,6 @@
 import { type CallOptions, type Transport, createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
-import { State, createStateTracker, isEmptyMessage, unpackMapOutput } from "@substreams/core";
+import { createStateTracker, isEmptyMessage, unpackMapOutput } from "@substreams/core";
 import {
   BlockScopedData,
   BlockUndoSignal,
@@ -44,16 +44,16 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
 type LocalEventTypes = {
   // block
   block: [block: BlockScopedData];
-  session: [session: SessionInit, state: State];
-  progress: [progress: ModulesProgress, state: State];
-  undo: [undo: BlockUndoSignal, state: State];
+  session: [session: SessionInit, state: any];
+  progress: [progress: ModulesProgress, state: any];
+  undo: [undo: BlockUndoSignal, state: any];
 
   // debug (only available in development mode)
-  debugSnapshotData: [undo: InitialSnapshotData, state: State];
-  debugSnapshotComplete: [undo: InitialSnapshotComplete, state: State];
+  debugSnapshotData: [undo: InitialSnapshotData, state: any];
+  debugSnapshotComplete: [undo: InitialSnapshotComplete, state: any];
 
   // response
-  response: [response: Response, state: State];
+  response: [response: Response, state: any];
   cursor: [cursor: string, clock: Clock];
   output: [message: Message<AnyMessage>, cursor: string, clock: Clock];
   anyMessage: [message: JsonObject, cursor: string, clock: Clock];
@@ -77,7 +77,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     if (delay) {
       await setTimeout(delay);
     }
-    const track = createStateTracker(this.request);
+    const track = createStateTracker();
     const client = createPromiseClient(Stream, this.transport);
 
     for await (const response of client.blocks(this.request, this.options)) {
