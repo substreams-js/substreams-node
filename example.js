@@ -24,8 +24,9 @@ const moduleHash = await createModuleHashHex(substreamPackage.modules, outputMod
 console.log({ moduleHash });
 
 // Connect Transport
+const headers = new Headers({ "User-Agent": "@substreams/node" });
+const transport = createDefaultTransport(baseUrl, token, registry, headers);
 const registry = createRegistry(substreamPackage);
-const transport = createDefaultTransport(baseUrl, token, registry);
 const request = createRequest({
   substreamPackage,
   outputModule,
@@ -44,4 +45,5 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
-emitter.start(500); // 500ms delay start
+await emitter.start();
+console.log("✅ done");

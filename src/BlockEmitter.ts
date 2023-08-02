@@ -1,40 +1,76 @@
-import { type CallOptions, type Transport, createPromiseClient } from "@bufbuild/connect";
+import type { CallOptions, Transport } from "@bufbuild/connect";
+import { createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
 import { Progress, createStateTracker, isEmptyMessage, unpackMapOutput } from "@substreams/core";
-import {
+import type {
   BlockScopedData,
   BlockUndoSignal,
   Clock,
   InitialSnapshotComplete,
   InitialSnapshotData,
   ModulesProgress,
-  type Request,
+  Request,
   Response,
   SessionInit,
-  Stream,
 } from "@substreams/core/proto";
+import { Stream } from "@substreams/core/proto";
 import { EventEmitter } from "node:events";
-import { setTimeout } from "node:timers/promises";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
 
   emit<TEventName extends keyof TEvents & string>(eventName: TEventName, ...eventArg: TEvents[TEventName]) {
-    this.emitter.emit(eventName, ...(eventArg as []));
+    return this.emitter.emit(eventName, ...(eventArg as []));
   }
 
   on<TEventName extends keyof TEvents & string>(
     eventName: TEventName,
     handler: (...eventArg: TEvents[TEventName]) => void,
   ) {
-    this.emitter.on(eventName, handler as any);
+    return this.emitter.on(eventName, handler as any);
+  }
+
+  once<TEventName extends keyof TEvents & string>(
+    eventName: TEventName,
+    handler: (...eventArg: TEvents[TEventName]) => void,
+  ) {
+    return this.emitter.once(eventName, handler as any);
+  }
+
+  removeListener<TEventName extends keyof TEvents & string>(
+    eventName: TEventName,
+    handler: (...eventArg: TEvents[TEventName]) => void,
+  ) {
+    return this.emitter.removeListener(eventName, handler as any);
+  }
+
+  removeAllListeners<TEventName extends keyof TEvents & string>(eventName?: TEventName) {
+    if (eventName) {
+      return this.emitter.removeAllListeners(eventName);
+    }
+    return this.emitter.removeAllListeners();
+  }
+
+  eventNames() {
+    return this.emitter.eventNames();
+  }
+
+  getMaxListeners() {
+    return this.emitter.getMaxListeners();
+  }
+
+  listenerCount<TEventName extends keyof TEvents & string>(
+    eventName: TEventName,
+    handler: (...eventArg: TEvents[TEventName]) => void,
+  ) {
+    return this.emitter.listenerCount(eventName, handler as any);
   }
 
   off<TEventName extends keyof TEvents & string>(
     eventName: TEventName,
     handler: (...eventArg: TEvents[TEventName]) => void,
   ) {
-    this.emitter.off(eventName, handler as any);
+    return this.emitter.off(eventName, handler as any);
   }
 }
 
@@ -55,6 +91,7 @@ type LocalEventTypes = {
   // response
   response: [response: Response, state: Progress];
   cursor: [cursor: string, clock: Clock];
+  clock: [clock: Clock];
   output: [message: Message<AnyMessage>, cursor: string, clock: Clock];
   anyMessage: [message: JsonObject, cursor: string, clock: Clock];
 };
@@ -73,10 +110,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     this.options = options;
   }
 
-  public async start(delay?: number) {
-    if (delay) {
-      await setTimeout(delay);
-    }
+  public async start() {
     const track = createStateTracker();
     const client = createPromiseClient(Stream, this.transport);
 
@@ -97,6 +131,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
                 this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
               }
             }
+            this.emit("clock", block.clock);
             this.emit("cursor", block.cursor, block.clock);
           }
           break;
