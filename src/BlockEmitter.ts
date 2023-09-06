@@ -1,4 +1,3 @@
-import { EventEmitter } from "node:events";
 import type { CallOptions, Transport } from "@bufbuild/connect";
 import { createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
@@ -15,6 +14,7 @@ import type {
   SessionInit,
 } from "@substreams/core/proto";
 import { Stream } from "@substreams/core/proto";
+import { EventEmitter } from "node:events";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
@@ -83,6 +83,7 @@ type LocalEventTypes = {
   session: [session: SessionInit, state: Progress];
   progress: [progress: ModulesProgress, state: Progress];
   undo: [undo: BlockUndoSignal, state: Progress];
+  error: [error: unknown];
 
   // debug (only available in development mode)
   debugSnapshotData: [undo: InitialSnapshotData, state: Progress];
@@ -126,52 +127,56 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     const track = createStateTracker();
     const client = createPromiseClient(Stream, this.transport);
 
-    for await (const response of client.blocks(this.request, this.options)) {
-      if (this.stopped) {
-        break;
-      }
-      const state = track(response);
-      this.emit("response", response, state);
+    try {
+      for await (const response of client.blocks(this.request, this.options)) {
+        if (this.stopped) {
+          break;
+        }
+        const state = track(response);
+        this.emit("response", response, state);
 
-      switch (response.message.case) {
-        case "blockScopedData": {
-          const block = response.message.value;
-          this.emit("block", block);
-          if (block.clock) {
-            const output = unpackMapOutput(response, this.registry);
-            if (output) {
-              this.emit("output", output, block.cursor, block.clock);
-              if (!isEmptyMessage(output)) {
-                const message = output.toJson({ typeRegistry: this.registry });
-                this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
+        switch (response.message.case) {
+          case "blockScopedData": {
+            const block = response.message.value;
+            this.emit("block", block);
+            if (block.clock) {
+              const output = unpackMapOutput(response, this.registry);
+              if (output) {
+                this.emit("output", output, block.cursor, block.clock);
+                if (!isEmptyMessage(output)) {
+                  const message = output.toJson({ typeRegistry: this.registry });
+                  this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
+                }
               }
+              this.emit("clock", block.clock);
+              this.emit("cursor", block.cursor, block.clock);
             }
-            this.emit("clock", block.clock);
-            this.emit("cursor", block.cursor, block.clock);
+            break;
           }
-          break;
-        }
-        case "progress": {
-          this.emit("progress", response.message.value, state);
-          break;
-        }
-        case "session": {
-          this.emit("session", response.message.value, state);
-          break;
-        }
-        case "blockUndoSignal": {
-          this.emit("undo", response.message.value, state);
-          break;
-        }
-        case "debugSnapshotData": {
-          this.emit("debugSnapshotData", response.message.value, state);
-          break;
-        }
-        case "debugSnapshotComplete": {
-          this.emit("debugSnapshotComplete", response.message.value, state);
-          break;
+          case "progress": {
+            this.emit("progress", response.message.value, state);
+            break;
+          }
+          case "session": {
+            this.emit("session", response.message.value, state);
+            break;
+          }
+          case "blockUndoSignal": {
+            this.emit("undo", response.message.value, state);
+            break;
+          }
+          case "debugSnapshotData": {
+            this.emit("debugSnapshotData", response.message.value, state);
+            break;
+          }
+          case "debugSnapshotComplete": {
+            this.emit("debugSnapshotComplete", response.message.value, state);
+            break;
+          }
         }
       }
+    } catch (error) {
+      this.emit("error", error);
     }
   }
 }
