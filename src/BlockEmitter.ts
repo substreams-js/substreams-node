@@ -101,6 +101,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   public request: Request;
   public registry: IMessageTypeRegistry;
   public options?: CallOptions;
+  private stopped = false;
 
   constructor(transport: Transport, request: Request, registry: IMessageTypeRegistry, options?: CallOptions) {
     super();
@@ -110,11 +111,25 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
     this.options = options;
   }
 
+  /**
+   * Stop streaming blocks
+   */
+  public stop() {
+    this.stopped = true;
+  }
+
+  /**
+   * Start streaming blocks
+   */
   public async start() {
+    this.stopped = false;
     const track = createStateTracker();
     const client = createPromiseClient(Stream, this.transport);
 
     for await (const response of client.blocks(this.request, this.options)) {
+      if (this.stopped) {
+        break;
+      }
       const state = track(response);
       this.emit("response", response, state);
 

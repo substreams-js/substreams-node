@@ -25,8 +25,8 @@ console.log({ moduleHash });
 
 // Connect Transport
 const headers = new Headers({ "User-Agent": "@substreams/node" });
-const transport = createDefaultTransport(baseUrl, token, registry, headers);
 const registry = createRegistry(substreamPackage);
+const transport = createDefaultTransport(baseUrl, token, registry, headers);
 const request = createRequest({
   substreamPackage,
   outputModule,
