@@ -1,3 +1,4 @@
+import { EventEmitter } from "node:events";
 import type { CallOptions, Transport } from "@bufbuild/connect";
 import { createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
@@ -14,7 +15,6 @@ import type {
   SessionInit,
 } from "@substreams/core/proto";
 import { Stream } from "@substreams/core/proto";
-import { EventEmitter } from "node:events";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
@@ -153,6 +153,10 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
         }
         case "progress": {
           this.emit("progress", response.message.value, state);
+          break;
+        }
+        case "session": {
+          this.emit("session", response.message.value, state);
           break;
         }
         case "blockUndoSignal": {
