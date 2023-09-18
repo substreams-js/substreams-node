@@ -38,6 +38,11 @@ const request = createRequest({
 // NodeJS Events
 const emitter = new BlockEmitter(transport, request, registry);
 
+// Session Trace ID
+emitter.on("session", (session) => {
+  console.dir(session);
+});
+
 // Stream Blocks
 emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(message);
