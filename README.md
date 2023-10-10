@@ -40,6 +40,9 @@ const stopBlockNum = "+3";
 
 // Read Substream
 const substreamPackage = await readPackage(manifest);
+if (!substreamPackage.modules) {
+  throw new Error("No modules found in substream package");
+}
 const moduleHash = await createModuleHashHex(substreamPackage.modules, outputModule);
 console.log({ moduleHash });
 
