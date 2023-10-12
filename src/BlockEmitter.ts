@@ -1,4 +1,3 @@
-import { EventEmitter } from "node:events";
 import type { CallOptions, Transport } from "@bufbuild/connect";
 import { createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
@@ -15,6 +14,7 @@ import type {
   SessionInit,
 } from "@substreams/core/proto";
 import { Stream } from "@substreams/core/proto";
+import { EventEmitter } from "eventemitter3";
 
 export class TypedEventEmitter<TEvents extends Record<string, any>> {
   private emitter = new EventEmitter();
@@ -55,15 +55,8 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
     return this.emitter.eventNames();
   }
 
-  getMaxListeners() {
-    return this.emitter.getMaxListeners();
-  }
-
-  listenerCount<TEventName extends keyof TEvents & string>(
-    eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
-  ) {
-    return this.emitter.listenerCount(eventName, handler as any);
+  listenerCount<TEventName extends keyof TEvents & string>(eventName: TEventName) {
+    return this.emitter.listenerCount(eventName);
   }
 
   off<TEventName extends keyof TEvents & string>(
