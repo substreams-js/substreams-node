@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Substreams for Node.js",
   "license": "MIT",
   "repository": "substreams-js/substreams-node",
@@ -19,11 +19,11 @@
   "files": ["dist", "src", "example.js"],
   "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
   "dependencies": {
-    "@bufbuild/connect": "latest",
-    "@bufbuild/connect-node": "latest",
+    "@substreams/core": "^0.7.0",
     "@bufbuild/protobuf": "latest",
-    "@substreams/core": "^0.1.19",
-    "eventemitter3": "latest"
+    "eventemitter3": "latest",
+    "@connectrpc/connect": "latest",
+    "@connectrpc/connect-node": "latest"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",

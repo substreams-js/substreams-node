@@ -1,6 +1,6 @@
 import { createHeadersInterceptor } from "./createHeadersInterceptor.js";
-import { Transport } from "@bufbuild/connect";
-import { createGrpcTransport } from "@bufbuild/connect-node";
+import { Transport } from "@connectrpc/connect";
+import { createGrpcTransport } from "@connectrpc/connect-node";
 import type { IMessageTypeRegistry } from "@bufbuild/protobuf";
 import { createAuthInterceptor } from "@substreams/core";
 
