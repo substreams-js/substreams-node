@@ -1,7 +1,7 @@
-import type { CallOptions, Transport } from "@bufbuild/connect";
-import { createPromiseClient } from "@bufbuild/connect";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
-import { Progress, createStateTracker, isEmptyMessage, unpackMapOutput } from "@substreams/core";
+import type { CallOptions, Transport } from "@connectrpc/connect";
+import { createPromiseClient } from "@connectrpc/connect";
+import { isEmptyMessage, unpackMapOutput } from "@substreams/core";
 import type {
   BlockScopedData,
   BlockUndoSignal,
@@ -73,16 +73,16 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
 type LocalEventTypes = {
   // block
   block: [block: BlockScopedData];
-  session: [session: SessionInit, state: Progress];
-  progress: [progress: ModulesProgress, state: Progress];
-  undo: [undo: BlockUndoSignal, state: Progress];
+  session: [session: SessionInit];
+  progress: [progress: ModulesProgress];
+  undo: [undo: BlockUndoSignal];
 
   // debug (only available in development mode)
-  debugSnapshotData: [undo: InitialSnapshotData, state: Progress];
-  debugSnapshotComplete: [undo: InitialSnapshotComplete, state: Progress];
+  debugSnapshotData: [undo: InitialSnapshotData];
+  debugSnapshotComplete: [undo: InitialSnapshotComplete];
 
   // response
-  response: [response: Response, state: Progress];
+  response: [response: Response];
   cursor: [cursor: string, clock: Clock];
   clock: [clock: Clock];
   output: [message: Message<AnyMessage>, cursor: string, clock: Clock];
@@ -116,15 +116,13 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
    */
   public async start() {
     this.stopped = false;
-    const track = createStateTracker();
     const client = createPromiseClient(Stream, this.transport);
 
     for await (const response of client.blocks(this.request, this.options)) {
       if (this.stopped) {
         break;
       }
-      const state = track(response);
-      this.emit("response", response, state);
+      this.emit("response", response);
 
       switch (response.message.case) {
         case "blockScopedData": {
@@ -145,23 +143,23 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
           break;
         }
         case "progress": {
-          this.emit("progress", response.message.value, state);
+          this.emit("progress", response.message.value);
           break;
         }
         case "session": {
-          this.emit("session", response.message.value, state);
+          this.emit("session", response.message.value);
           break;
         }
         case "blockUndoSignal": {
-          this.emit("undo", response.message.value, state);
+          this.emit("undo", response.message.value);
           break;
         }
         case "debugSnapshotData": {
-          this.emit("debugSnapshotData", response.message.value, state);
+          this.emit("debugSnapshotData", response.message.value);
           break;
         }
         case "debugSnapshotComplete": {
-          this.emit("debugSnapshotComplete", response.message.value, state);
+          this.emit("debugSnapshotComplete", response.message.value);
           break;
         }
       }
