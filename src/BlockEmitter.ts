@@ -16,35 +16,26 @@ import type {
 import { Stream } from "@substreams/core/proto";
 import { EventEmitter } from "eventemitter3";
 
-export class TypedEventEmitter<TEvents extends Record<string, any>> {
+export class TypedEventEmitter<Events extends Record<string, any>> {
   private emitter = new EventEmitter();
 
-  emit<TEventName extends keyof TEvents & string>(eventName: TEventName, ...eventArg: TEvents[TEventName]) {
+  emit<EventName extends keyof Events & string>(eventName: EventName, ...eventArg: Events[EventName]) {
     return this.emitter.emit(eventName, ...(eventArg as []));
   }
 
-  on<TEventName extends keyof TEvents & string>(
-    eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
-  ) {
+  on<EventName extends keyof Events & string>(eventName: EventName, handler: (...eventArg: Events[EventName]) => void) {
     return this.emitter.on(eventName, handler as any);
   }
 
-  once<TEventName extends keyof TEvents & string>(
-    eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
-  ) {
+  once<EventName extends keyof Events & string>(eventName: EventName, handler: (...eventArg: Events[EventName]) => void) {
     return this.emitter.once(eventName, handler as any);
   }
 
-  removeListener<TEventName extends keyof TEvents & string>(
-    eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
-  ) {
+  removeListener<EventName extends keyof Events & string>(eventName: EventName, handler: (...eventArg: Events[EventName]) => void) {
     return this.emitter.removeListener(eventName, handler as any);
   }
 
-  removeAllListeners<TEventName extends keyof TEvents & string>(eventName?: TEventName) {
+  removeAllListeners<EventName extends keyof Events & string>(eventName?: EventName) {
     if (eventName) {
       return this.emitter.removeAllListeners(eventName);
     }
@@ -55,14 +46,11 @@ export class TypedEventEmitter<TEvents extends Record<string, any>> {
     return this.emitter.eventNames();
   }
 
-  listenerCount<TEventName extends keyof TEvents & string>(eventName: TEventName) {
+  listenerCount<EventName extends keyof Events & string>(eventName: EventName) {
     return this.emitter.listenerCount(eventName);
   }
 
-  off<TEventName extends keyof TEvents & string>(
-    eventName: TEventName,
-    handler: (...eventArg: TEvents[TEventName]) => void,
-  ) {
+  off<EventName extends keyof Events & string>(eventName: EventName, handler: (...eventArg: Events[EventName]) => void) {
     return this.emitter.off(eventName, handler as any);
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Substreams for Node.js",
   "license": "MIT",
   "repository": "substreams-js/substreams-node",
@@ -10,7 +10,7 @@
   "runkitExampleFilename": "example.js",
   "sideEffects": false,
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
     "build": "tsc",
@@ -19,11 +19,11 @@
   "files": ["dist", "src", "example.js"],
   "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
   "dependencies": {
-    "@substreams/core": "^0.7.0",
     "@bufbuild/protobuf": "latest",
-    "eventemitter3": "latest",
     "@connectrpc/connect": "latest",
-    "@connectrpc/connect-node": "latest"
+    "@connectrpc/connect-web": "latest",
+    "@substreams/core": "^0.7.0",
+    "eventemitter3": "latest"
   },
   "devDependencies": {
     "@tsconfig/recommended": "latest",

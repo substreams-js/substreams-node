@@ -32,8 +32,7 @@ const token = process.env.SUBSTREAMS_API_TOKEN;
 const baseUrl = "https://mainnet.eth.streamingfast.io:443";
 
 // User parameters
-const manifest =
-  "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.3/subtivity-ethereum-v0.2.3.spkg";
+const manifest = "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.3/subtivity-ethereum-v0.2.3.spkg";
 const outputModule = "map_block_stats";
 const startBlockNum = 17381140;
 const stopBlockNum = "+3";

@@ -1,18 +1,12 @@
-import { createHeadersInterceptor } from "./createHeadersInterceptor.js";
-import { Transport } from "@connectrpc/connect";
-import { createGrpcTransport } from "@connectrpc/connect-node";
 import type { IMessageTypeRegistry } from "@bufbuild/protobuf";
+import { Transport } from "@connectrpc/connect";
+import { createGrpcWebTransport } from "@connectrpc/connect-web";
 import { createAuthInterceptor } from "@substreams/core";
+import { createHeadersInterceptor } from "./createHeadersInterceptor.js";
 
-export function createDefaultTransport(
-  baseUrl: string,
-  token: string,
-  registry: IMessageTypeRegistry,
-  headers?: Headers,
-): Transport {
-  return createGrpcTransport({
+export function createDefaultTransport(baseUrl: string, token: string, registry: IMessageTypeRegistry, headers?: Headers): Transport {
+  return createGrpcWebTransport({
     baseUrl,
-    httpVersion: "2",
     interceptors: [createHeadersInterceptor(headers), createAuthInterceptor(token)],
     jsonOptions: {
       typeRegistry: registry,
