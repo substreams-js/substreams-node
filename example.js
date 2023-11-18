@@ -51,5 +51,6 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
+console.time("✅ done");
 await emitter.start();
-console.log("✅ done");
+console.timeEnd("✅ done");
