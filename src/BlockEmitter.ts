@@ -1,7 +1,6 @@
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
 import type { CallOptions, Transport } from "@connectrpc/connect";
-import { createPromiseClient } from "@connectrpc/connect";
-import { isEmptyMessage, unpackMapOutput } from "@substreams/core";
+import { isEmptyMessage, streamBlocks, unpackMapOutput } from "@substreams/core";
 import type {
   BlockScopedData,
   BlockUndoSignal,
@@ -13,7 +12,6 @@ import type {
   Response,
   SessionInit,
 } from "@substreams/core/proto";
-import { Stream } from "@substreams/core/proto";
 import { EventEmitter } from "eventemitter3";
 
 export class TypedEventEmitter<Events extends Record<string, any>> {
@@ -104,9 +102,8 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
    */
   public async start() {
     this.stopped = false;
-    const client = createPromiseClient(Stream, this.transport);
 
-    for await (const response of client.blocks(this.request, this.options)) {
+    for await (const response of streamBlocks(this.transport, this.request, this.options)) {
       if (this.stopped) {
         break;
       }
