@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Substreams for Node.js",
   "license": "MIT",
   "repository": "substreams-js/substreams-node",
@@ -21,7 +21,7 @@
   "dependencies": {
     "@bufbuild/protobuf": "latest",
     "@connectrpc/connect": "latest",
-    "@connectrpc/connect-web": "latest",
+    "@connectrpc/connect-node": "latest",
     "@substreams/core": "^0.7.0",
     "eventemitter3": "latest"
   },
