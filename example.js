@@ -4,6 +4,7 @@ import { BlockEmitter, createNodeTransport } from "@substreams/node";
 
 // auth API token
 // https://app.streamingfast.io/
+// https://app.pinax.network/
 if (!process.env.SUBSTREAMS_API_TOKEN) {
   throw new Error("SUBSTREAMS_API_TOKEN is require");
 }
