@@ -1,6 +1,6 @@
 import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter, createDefaultTransport } from "@substreams/node";
+import { BlockEmitter, createNodeTransport } from "@substreams/node";
 
 // auth API token
 // https://app.streamingfast.io/
@@ -28,7 +28,7 @@ console.log({ moduleHash });
 // Connect Transport
 const headers = new Headers({ "User-Agent": "@substreams/node" });
 const registry = createRegistry(substreamPackage);
-const transport = createDefaultTransport(baseUrl, token, registry, headers);
+const transport = createNodeTransport(baseUrl, token, registry, headers);
 const request = createRequest({
   substreamPackage,
   outputModule,
