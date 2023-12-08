@@ -17,6 +17,8 @@ import {
 } from "@substreams/core/proto";
 import { EventEmitter } from "eventemitter3";
 
+export type CancelFn = () => void;
+
 export class TypedEventEmitter<Events extends Record<string, any>> {
   private emitter = new EventEmitter();
 
@@ -99,7 +101,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   /**
    * Start streaming blocks
    */
-  public start() {
+  public start(): CancelFn {
     const closeCallback = (error?: ConnectError) => {
       this.emit("close", error);
     };
