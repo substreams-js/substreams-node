@@ -24,12 +24,13 @@ import { BlockEmitter, createNodeTransport } from "@substreams/node";
 
 // auth API token
 // https://app.streamingfast.io/
+// https://app.pinax.network/
 if (!process.env.SUBSTREAMS_API_TOKEN) {
   throw new Error("SUBSTREAMS_API_TOKEN is require");
 }
 
 const token = process.env.SUBSTREAMS_API_TOKEN;
-const baseUrl = "https://mainnet.eth.streamingfast.io:443";
+const baseUrl = "https://eth.substreams.pinax.network:443";
 
 // User parameters
 const manifest = "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.3/subtivity-ethereum-v0.2.3.spkg";
@@ -54,7 +55,6 @@ const request = createRequest({
   outputModule,
   startBlockNum,
   stopBlockNum,
-  productionMode: true,
 });
 
 // NodeJS Events
@@ -72,6 +72,23 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
-await emitter.start();
-console.log("✅ done");
+// End of Stream
+emitter.on("close", (error) => {
+  if (error) {
+    console.error(error);
+  }
+  console.timeEnd("🆗 close");
+});
+
+// Fatal Error
+emitter.on("fatalError", (error) => {
+  console.error(error);
+});
+
+console.log("✅ start");
+console.time("🆗 close");
+const cancel = emitter.start();
+
+// Cancel after 3 seconds
+setTimeout(cancel, 3000);
 ```
