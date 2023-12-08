@@ -88,5 +88,7 @@ emitter.on("fatalError", (error) => {
 console.log("✅ start");
 console.time("🆗 close");
 const cancel = emitter.start();
-// cancel() to exit substreams session
+
+// Cancel after 3 seconds
+setTimeout(cancel, 3000);
 ```

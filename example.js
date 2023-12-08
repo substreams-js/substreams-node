@@ -52,6 +52,14 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
+// End of Stream
+emitter.on("close", (error) => {
+  if (error) {
+    console.error(error);
+  }
+  console.timeEnd("🆗 close");
+});
+
 // Fatal Error
 emitter.on("fatalError", (error) => {
   console.error(error);
@@ -60,4 +68,6 @@ emitter.on("fatalError", (error) => {
 console.log("✅ start");
 console.time("🆗 close");
 const cancel = emitter.start();
-// cancel() to exit substreams session
+
+// Cancel after 3 seconds
+setTimeout(cancel, 3000);
