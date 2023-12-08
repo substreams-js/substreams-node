@@ -80,6 +80,11 @@ emitter.on("close", (error) => {
   console.timeEnd("🆗 close");
 });
 
+// Fatal Error
+emitter.on("fatalError", (error) => {
+  console.error(error);
+});
+
 console.log("✅ start");
 console.time("🆗 close");
 const cancel = emitter.start();

@@ -52,12 +52,9 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
-// End of Stream
-emitter.on("close", (error) => {
-  if (error) {
-    console.error(error);
-  }
-  console.timeEnd("🆗 close");
+// Fatal Error
+emitter.on("fatalError", (error) => {
+  console.error(error);
 });
 
 console.log("✅ start");
