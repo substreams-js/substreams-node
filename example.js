@@ -52,6 +52,15 @@ emitter.on("anyMessage", (message, cursor, clock) => {
   console.dir(clock);
 });
 
-console.time("✅ done");
-await emitter.start();
-console.timeEnd("✅ done");
+// End of Stream
+emitter.on("close", (error) => {
+  if (error) {
+    console.error(error);
+  }
+  console.timeEnd("🆗 close");
+});
+
+console.log("✅ start");
+console.time("🆗 close");
+const cancel = emitter.start();
+// cancel() to exit substreams session

@@ -1,16 +1,19 @@
+// import { type Request, type Response, Stream } from "@substreams/core/proto";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
-import type { CallOptions, Transport } from "@connectrpc/connect";
-import { isEmptyMessage, streamBlocks, unpackMapOutput } from "@substreams/core";
-import type {
+import { type CallOptions, type ConnectError, type Transport, createCallbackClient } from "@connectrpc/connect";
+import { isEmptyMessage, unpackMapOutput } from "@substreams/core";
+import {
   BlockScopedData,
   BlockUndoSignal,
   Clock,
+  Error as FatalError,
   InitialSnapshotComplete,
   InitialSnapshotData,
   ModulesProgress,
   Request,
   Response,
   SessionInit,
+  Stream,
 } from "@substreams/core/proto";
 import { EventEmitter } from "eventemitter3";
 
@@ -73,6 +76,10 @@ type LocalEventTypes = {
   clock: [clock: Clock];
   output: [message: Message<AnyMessage>, cursor: string, clock: Clock];
   anyMessage: [message: JsonObject, cursor: string, clock: Clock];
+
+  // error
+  close: [error?: ConnectError];
+  fatalError: [error: FatalError];
 };
 
 export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
@@ -80,7 +87,6 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   public request: Request;
   public registry: IMessageTypeRegistry;
   public options?: CallOptions;
-  private stopped = false;
 
   constructor(transport: Transport, request: Request, registry: IMessageTypeRegistry, options?: CallOptions) {
     super();
@@ -91,22 +97,14 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   }
 
   /**
-   * Stop streaming blocks
-   */
-  public stop() {
-    this.stopped = true;
-  }
-
-  /**
    * Start streaming blocks
    */
-  public async start() {
-    this.stopped = false;
+  public start() {
+    const closeCallback = (error?: ConnectError) => {
+      this.emit("close", error);
+    };
 
-    for await (const response of streamBlocks(this.transport, this.request, this.options)) {
-      if (this.stopped) {
-        break;
-      }
+    const messageCallback = (response: Response) => {
       this.emit("response", response);
 
       switch (response.message.case) {
@@ -147,7 +145,13 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
           this.emit("debugSnapshotComplete", response.message.value);
           break;
         }
+        case "fatalError": {
+          this.emit("fatalError", response.message.value);
+          break;
+        }
       }
-    }
+    };
+    const client = createCallbackClient(Stream, this.transport);
+    return client.blocks(this.request, messageCallback, closeCallback, this.options);
   }
 }
