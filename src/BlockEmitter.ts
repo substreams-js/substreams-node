@@ -89,7 +89,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   public request: Request;
   public registry: IMessageTypeRegistry;
   public options?: CallOptions;
-  private cancelFn?: CancelFn;
+  public cancelFn?: CancelFn;
 
   constructor(transport: Transport, request: Request, registry: IMessageTypeRegistry, options?: CallOptions) {
     super();
