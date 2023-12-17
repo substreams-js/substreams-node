@@ -89,6 +89,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   public request: Request;
   public registry: IMessageTypeRegistry;
   public options?: CallOptions;
+  private cancelFn?: CancelFn;
 
   constructor(transport: Transport, request: Request, registry: IMessageTypeRegistry, options?: CallOptions) {
     super();
@@ -99,11 +100,23 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   }
 
   /**
+   * Stop streaming blocks
+   */
+  public stop(): void {
+    if (this.cancelFn) {
+      this.cancelFn();
+    } else {
+      throw new Error("BlockEmitter.stop() called before BlockEmitter.start()");
+    }
+  }
+
+  /**
    * Start streaming blocks
    */
   public start(): CancelFn {
     const closeCallback = (error?: ConnectError) => {
       this.emit("close", error);
+      this.cancelFn = undefined;
     };
 
     const messageCallback = (response: Response) => {
@@ -154,6 +167,7 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
       }
     };
     const client = createCallbackClient(Stream, this.transport);
-    return client.blocks(this.request, messageCallback, closeCallback, this.options);
+    this.cancelFn = client.blocks(this.request, messageCallback, closeCallback, this.options);
+    return this.cancelFn;
   }
 }

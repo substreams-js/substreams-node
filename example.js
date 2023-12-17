@@ -67,7 +67,9 @@ emitter.on("fatalError", (error) => {
 
 console.log("✅ start");
 console.time("🆗 close");
-const cancel = emitter.start();
+emitter.start();
 
 // Cancel after 3 seconds
-setTimeout(cancel, 3000);
+setTimeout(() => {
+  emitter.stop();
+}, 3000);

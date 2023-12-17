@@ -89,6 +89,12 @@ console.log("✅ start");
 console.time("🆗 close");
 const cancel = emitter.start();
 
+console.log("✅ start");
+console.time("🆗 close");
+emitter.start();
+
 // Cancel after 3 seconds
-setTimeout(cancel, 3000);
+setTimeout(() => {
+  emitter.stop();
+}, 3000);
 ```
