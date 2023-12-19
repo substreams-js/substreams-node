@@ -71,5 +71,9 @@ emitter.start();
 
 // Cancel after 3 seconds
 setTimeout(() => {
-  emitter.stop();
+  try {
+    emitter.stop();
+  } catch (error) {
+    console.log("already stopped");
+  }
 }, 3000);
