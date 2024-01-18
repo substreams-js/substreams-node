@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@substreams/core": "latest",
+    "@substreams/manifest": "latest",
+    "@substreams/node": "latest",
+    "log-update": "latest"
+  }
+}
