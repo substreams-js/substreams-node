@@ -4,7 +4,7 @@
   "editor.defaultFormatter": "rome.rome",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports.rome": true
+    "source.organizeImports.rome": "explicit"
   },
   "files.associations": {
     "*.css": "tailwindcss"
