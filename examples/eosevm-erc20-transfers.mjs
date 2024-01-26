@@ -1,8 +1,6 @@
-import fs from "fs";
-import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
+import { createRegistry, createRequest } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
 import { BlockEmitter, createNodeTransport } from "@substreams/node";
-import LogUpdate from "log-update";
 
 // auth API token
 // https://app.streamingfast.io/
