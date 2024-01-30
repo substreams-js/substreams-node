@@ -50,10 +50,13 @@ emitter.on("session", (session) => {
 // Stream Blocks
 emitter.on("anyMessage", (message, cursor, clock) => {
   for ( const dbOp of message.dbOps ?? [] ) {
-    console.log(dbOp);
-    // const data = Bytes.fromString(dbOp.newData.toString("hex"));
-    // const decoded = Serializer.decode({data, abi, type: "delegated_bandwidth"});
-    // console.log(decoded);
+    const data = Buffer.from(dbOp.newData, "base64").toString("hex");
+    const decoded = Serializer.decode({data, abi, type: "delegated_bandwidth"});
+    const delband = {};
+    for ( const [key, value] of Object.entries(decoded) ) {
+      delband[key] = value.toJSON();
+    }
+    console.log(delband);
   }
 });
 
