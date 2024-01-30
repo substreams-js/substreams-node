@@ -50,6 +50,7 @@ emitter.on("session", (session) => {
 // Stream Blocks
 emitter.on("anyMessage", (message, cursor, clock) => {
   for ( const dbOp of message.dbOps ?? [] ) {
+    if ( !dbOp.newData ) continue;
     const data = Buffer.from(dbOp.newData, "base64").toString("hex");
     const decoded = Serializer.decode({data, abi, type: "delegated_bandwidth"});
     const delband = {};
