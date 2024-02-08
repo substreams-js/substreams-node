@@ -60,7 +60,7 @@ export class TypedEventEmitter<Events extends Record<string, any>> {
 /**
  * A map of event names to argument tuples
  */
-type LocalEventTypes = {
+export type LocalEventTypes = {
   // block
   block: [block: BlockScopedData];
   session: [session: SessionInit];

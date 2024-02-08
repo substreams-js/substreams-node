@@ -1,9 +1,8 @@
 {
   "name": "@substreams/node",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Substreams for Node.js & Web",
   "license": "MIT",
-  "repository": "substreams-js/substreams-node",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -42,7 +41,6 @@
     "eventemitter3": "latest"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "latest",
     "@types/node": "latest",
     "rome": "latest",
     "typescript": "latest"
