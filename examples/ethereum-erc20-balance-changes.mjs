@@ -25,7 +25,7 @@ if (!substreamPackage.modules) {
 }
 
 // Connect Transport
-const headers = new Headers({ "X-User-Agent": "@substreams/node", "X-Api-Key": SUBSTREAMS_API_KEY });
+const headers = new Headers({ "X-User-Agent": "@substreams/node", "X-Api-Key": token });
 const registry = createRegistry(substreamPackage);
 const transport = createNodeTransport(baseUrl, token, registry, headers);
 const request = createRequest({
