@@ -1,25 +1,25 @@
 {
   "name": "@substreams/node",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Substreams for Node.js & Web",
   "license": "MIT",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
     },
     "./createNodeTransport": {
-      "default": "./dist/src/createNodeTransport.js",
+      "types": "./dist/src/createNodeTransport.d.ts",
       "import": "./dist/src/createNodeTransport.js",
-      "types": "./dist/src/createNodeTransport.d.ts"
+      "default": "./dist/src/createNodeTransport.js"
     },
     "./createWebTransport": {
-      "default": "./dist/src/createWebTransport.js",
+      "types": "./dist/src/createWebTransport.d.ts",
       "import": "./dist/src/createWebTransport.js",
-      "types": "./dist/src/createWebTransport.d.ts"
+      "default": "./dist/src/createWebTransport.js"
     }
   },
   "sideEffects": false,

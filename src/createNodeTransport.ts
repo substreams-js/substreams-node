@@ -13,3 +13,5 @@ export function createNodeTransport(baseUrl: string, token: string, registry: IM
     },
   });
 }
+
+export default createNodeTransport;

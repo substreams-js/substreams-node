@@ -12,3 +12,5 @@ export function createWebTransport(baseUrl: string, token: string, registry: IMe
     },
   });
 }
+
+export default createWebTransport;
