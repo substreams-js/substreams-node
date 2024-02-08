@@ -3,7 +3,7 @@
     "@substreams/core": "latest",
     "@substreams/manifest": "latest",
     "@substreams/node": "latest",
-    "@wharfkit/antelope": "^1.0.6",
+    "@wharfkit/antelope": "latest",
     "log-update": "latest"
   }
 }

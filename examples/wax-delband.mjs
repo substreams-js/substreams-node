@@ -1,15 +1,16 @@
 import { createRegistry, createRequest, applyParams } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter, createNodeTransport } from "@substreams/node";
-import { APIClient, Bytes, Serializer } from "@wharfkit/antelope";
+import { BlockEmitter } from "@substreams/node";
+import { createNodeTransport } from "@substreams/node/createNodeTransport";
+import { APIClient, Serializer } from "@wharfkit/antelope";
 
 // auth API token
 // https://app.streamingfast.io/
 // https://app.pinax.network/
-if (!process.env.SUBSTREAMS_API_TOKEN) {
-  throw new Error("SUBSTREAMS_API_TOKEN is require");
+if (!process.env.SUBSTREAMS_API_KEY) {
+  throw new Error("SUBSTREAMS_API_KEY is require");
 }
-const token = process.env.SUBSTREAMS_API_TOKEN;
+const token = process.env.SUBSTREAMS_API_KEY;
 
 // RPC API Client
 const rpc = new APIClient({ url: "https://wax.api.eosnation.io" });

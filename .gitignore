@@ -6,6 +6,8 @@
 !.vscode
 !.node-version
 !.env.tpl
+*.csv
+*.cursor
 
 *-linux-x64
 *-macos-arm64

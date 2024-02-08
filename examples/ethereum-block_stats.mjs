@@ -1,15 +1,16 @@
-import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
+import { createRegistry, createRequest } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter, createNodeTransport } from "@substreams/node";
+import { BlockEmitter } from "@substreams/node";
+import { createNodeTransport } from "@substreams/node/createNodeTransport";
 
 // auth API token
 // https://app.streamingfast.io/
 // https://app.pinax.network/
-if (!process.env.SUBSTREAMS_API_TOKEN) {
-  throw new Error("SUBSTREAMS_API_TOKEN is require");
+if (!process.env.SUBSTREAMS_API_KEY) {
+  throw new Error("SUBSTREAMS_API_KEY is require");
 }
 
-const token = process.env.SUBSTREAMS_API_TOKEN;
+const token = process.env.SUBSTREAMS_API_KEY;
 const baseUrl = "https://eth.substreams.pinax.network:443";
 
 // User parameters
@@ -23,13 +24,10 @@ const substreamPackage = await readPackage(manifest);
 if (!substreamPackage.modules) {
   throw new Error("No modules found in substream package");
 }
-const moduleHash = await createModuleHashHex(substreamPackage.modules, outputModule);
-console.log({ moduleHash });
 
 // Connect Transport
-const headers = new Headers({ "User-Agent": "@substreams/node" });
 const registry = createRegistry(substreamPackage);
-const transport = createNodeTransport(baseUrl, token, registry, headers);
+const transport = createNodeTransport(baseUrl, token, registry);
 const request = createRequest({
   substreamPackage,
   outputModule,

@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/substreams-js/substreams-node)](LICENSE)
 [![Try substreams on RunKit](https://badge.runkitcdn.com/@substreams/node.svg)](https://npm.runkit.com/@substreams/node)
 
-> Substreams for `Node.js`
+> Substreams for `Node.js` & Web
 
 ## Install
 
@@ -20,21 +20,24 @@ npm install @substreams/node
 ```typescript
 import { createModuleHashHex, createRegistry, createRequest } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter, createNodeTransport } from "@substreams/node";
+import { BlockEmitter } from "@substreams/node";
+import { createNodeTransport } from "@substreams/node/createNodeTransport";
+// or
+import { createWebTransport } from "@substreams/node/createWebTransport";
 
 // auth API token
 // https://app.streamingfast.io/
 // https://app.pinax.network/
-if (!process.env.SUBSTREAMS_API_TOKEN) {
-  throw new Error("SUBSTREAMS_API_TOKEN is require");
+if (!process.env.SUBSTREAMS_API_KEY) {
+  throw new Error("SUBSTREAMS_API_KEY is require");
 }
 
-const token = process.env.SUBSTREAMS_API_TOKEN;
+const token = process.env.SUBSTREAMS_API_KEY;
 const baseUrl = "https://eth.substreams.pinax.network:443";
 
 // User parameters
-const manifest = "https://github.com/pinax-network/subtivity-substreams/releases/download/v0.2.3/subtivity-ethereum-v0.2.3.spkg";
-const outputModule = "map_block_stats";
+const manifest = "https://github.com/pinax-network/substreams-erc20-balance-changes/releases/download/v1.2.0/erc20-balance-changes-mainnet-v1.2.0.spkg";
+const outputModule = "map_balance_changes";
 const startBlockNum = 17381140;
 const stopBlockNum = "+3";
 
@@ -47,7 +50,7 @@ const moduleHash = await createModuleHashHex(substreamPackage.modules, outputMod
 console.log({ moduleHash });
 
 // Connect Transport
-const headers = new Headers({ "User-Agent": "@substreams/node" });
+const headers = new Headers({ "X-User-Agent": "@substreams/node", "X-Api-Key": SUBSTREAMS_API_KEY });
 const registry = createRegistry(substreamPackage);
 const transport = createNodeTransport(baseUrl, token, registry, headers);
 const request = createRequest({
