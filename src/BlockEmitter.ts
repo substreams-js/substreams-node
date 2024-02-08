@@ -1,4 +1,3 @@
-// import { type Request, type Response, Stream } from "@substreams/core/proto";
 import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
 import { type CallOptions, type ConnectError, type Transport, createCallbackClient } from "@connectrpc/connect";
 import { isEmptyMessage, unpackMapOutput } from "@substreams/core";
