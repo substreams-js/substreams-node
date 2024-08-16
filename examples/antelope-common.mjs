@@ -14,7 +14,7 @@ const token = process.env.SUBSTREAMS_API_KEY;
 const baseUrl = "https://eos.substreams.pinax.network:443";
 
 // User parameters
-const manifest = "https://spkg.io/pinax-network/antelope-common-v0.3.0.spkg";
+const manifest = "https://spkg.io/pinax-network/antelope-common-v0.4.0.spkg";
 const outputModule = "filtered_transactions";
 const startBlockNum = -86400*4*2;
 const productionMode = true;
