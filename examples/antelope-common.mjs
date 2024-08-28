@@ -16,7 +16,8 @@ const baseUrl = "https://eos.substreams.pinax.network:443";
 // User parameters
 const manifest = "https://spkg.io/pinax-network/antelope-common-v0.4.0.spkg";
 const outputModule = "filtered_transactions";
-const startBlockNum = -86400*4*2;
+const startBlockNum = 390603353;
+const stopBlockNum = startBlockNum + 86400*2*4;
 const productionMode = true;
 const params = [`filtered_transactions=code:eosio && (action:buyram || action:sellram || action:ramtransfer)`]
 
@@ -40,6 +41,7 @@ const request = createRequest({
   substreamPackage,
   outputModule,
   startBlockNum,
+  stopBlockNum,
   productionMode,
 });
 
@@ -58,16 +60,16 @@ emitter.on("progress", (progress) => {
   for ( const moduleStat of progress?.modulesStats ?? [] ) {
     moduleStats[moduleStat.name] = moduleStat.totalProcessedBlockCount;
   }
-  // console.dir({ runningJobs, ...processedBytes, moduleStats });
+  console.dir({ runningJobs, ...processedBytes, moduleStats });
 });
 
 emitter.on("clock", clock => {
-  console.log(clock.number);
+  // console.log(clock.number);
 });
 
 // Stream Blocks
 emitter.on("anyMessage", (message, cursor, clock) => {
-  // console.dir(message);
+  console.dir(message);
   // console.dir(cursor);
   // console.dir(clock);
 });
