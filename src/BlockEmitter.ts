@@ -1,4 +1,5 @@
-import { AnyMessage, IMessageTypeRegistry, JsonObject, Message } from "@bufbuild/protobuf";
+// import { IMessageTypeRegistry } from "@bufbuild/protobuf";
+import { AnyMessage, JsonObject, Message } from "@bufbuild/protobuf";
 import { type CallOptions, type ConnectError, type Transport, createCallbackClient } from "@connectrpc/connect";
 import { isEmptyMessage, unpackMapOutput } from "@substreams/core";
 import {
@@ -85,12 +86,12 @@ export type LocalEventTypes = {
 
 export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
   public transport: Transport;
-  public request: Request;
-  public registry: IMessageTypeRegistry;
+  public request: any; // Request
+  public registry: any; // IMessageTypeRegistry
   public options?: CallOptions;
   public cancelFn?: CancelFn;
 
-  constructor(transport: Transport, request: Request, registry: IMessageTypeRegistry, options?: CallOptions) {
+  constructor(transport: Transport, request: any /* Request */, registry: any /* IMessageTypeRegistry */, options?: CallOptions) {
     super();
     this.transport = transport;
     this.request = request;

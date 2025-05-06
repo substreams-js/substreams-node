@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Substreams for Node.js & Web",
   "license": "MIT",
   "type": "module",
