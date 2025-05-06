@@ -1,6 +1,6 @@
 {
   "name": "@substreams/node",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Substreams for Node.js & Web",
   "license": "MIT",
   "type": "module",
@@ -30,19 +30,26 @@
     "build": "tsc",
     "prepublishOnly": "npm run build"
   },
-  "files": ["dist", "src"],
-  "keywords": ["substreams", "streamingfast", "thegraph", "graph"],
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "substreams",
+    "streamingfast",
+    "thegraph",
+    "graph"
+  ],
   "dependencies": {
-    "@bufbuild/protobuf": "latest",
-    "@connectrpc/connect": "latest",
-    "@connectrpc/connect-node": "latest",
-    "@connectrpc/connect-web": "latest",
+    "@bufbuild/protobuf": "1.7",
+    "@connectrpc/connect": "1.3",
+    "@connectrpc/connect-node": "1.3",
+    "@connectrpc/connect-web": "1.3",
     "@substreams/core": "latest",
     "eventemitter3": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
-    "rome": "latest",
-    "typescript": "latest"
+    "typescript": "5.3.3"
   }
 }

@@ -1,7 +1,7 @@
 import { createRegistry, createRequest, applyParams } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter } from "@substreams/node";
-import { createNodeTransport } from "@substreams/node/createNodeTransport";
+import { BlockEmitter } from "../src/BlockEmitter";
+import { createNodeTransport } from "../src/createNodeTransport";
 
 // auth API token
 // https://app.streamingfast.io/
