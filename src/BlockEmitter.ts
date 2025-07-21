@@ -125,8 +125,11 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
       switch (response.message.case) {
         case "blockScopedData": {
           const block = response.message.value;
+          const isNotTyped = block.output?.mapOutput?.typeUrl == '';
+          const isEmpty = block.output?.mapOutput?.value.byteLength === 0;
+
           this.emit("block", block);
-          if (block.clock) {
+          if (block.clock && !isEmpty && !isNotTyped) {
             const output = unpackMapOutput(response, this.registry);
             if (output) {
               this.emit("output", output, block.cursor, block.clock);
@@ -135,6 +138,8 @@ export class BlockEmitter extends TypedEventEmitter<LocalEventTypes> {
                 this.emit("anyMessage", message as JsonObject, block.cursor, block.clock);
               }
             }
+          }
+          if (block.clock) {
             this.emit("clock", block.clock);
             this.emit("cursor", block.cursor, block.clock);
           }
