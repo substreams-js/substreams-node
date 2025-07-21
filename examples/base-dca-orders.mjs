@@ -1,6 +1,6 @@
 import { applyParams, createRegistry, createRequest } from "@substreams/core";
 import { readPackage } from "@substreams/manifest";
-import { BlockEmitter } from "../dist/index.js";
+import { BlockEmitter } from "@substreams/node";
 import { createNodeTransport } from "@substreams/node/createNodeTransport";
 
 // auth API token
